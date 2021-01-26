@@ -1,24 +1,13 @@
-# gulishop-client
+# My shop
 
-## Project setup
+### 详细介绍
 ```
-yarn install
+内容有,登录,注册,账户验证,后台管理系统
 ```
 
-### Compiles and hot-reloads for development
+### 运行方式
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

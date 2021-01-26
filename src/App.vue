@@ -1,7 +1,8 @@
 <template>
   <div>
-     <Footer></Footer>
-     <Header></Header>
+       <Header></Header>
+      <router-view></router-view>
+     <Footer v-show='!$route.meta.isShow'></Footer>
   </div>
 </template>
 <script>
@@ -12,9 +13,12 @@ export default {
   components:{
     Footer,
     Header
-  }
-
+  },
+mounted() {
+  console.log(this,'我是App')
+},
 };
+
 </script>
 <style>
 
