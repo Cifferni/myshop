@@ -67,10 +67,6 @@ export default {
   },
   methods: {
     search() {
-      //this.$router.push('/search/'+this.keyWord+'?keyWord1='+ this.keyWord.toUpperCase())
-      //模板字符串写法
-      //this.$router.push (`/search/${this.keyWord}?keyWord1=${this.keyWord.toUpperCase()}`)
-      //对象的形式,配合name
       this.$router.push({
         name: "search",
         params: { keyWord: this.keyWord ||undefined },
