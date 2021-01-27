@@ -14,9 +14,7 @@ export default {
     Footer,
     Header
   },
-mounted() {
-  console.log(this,'我是App')
-},
+
 };
 
 </script>

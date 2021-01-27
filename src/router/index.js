@@ -32,9 +32,7 @@ const router = new VueRouter({
       path: "/search/:keyWord?",
       component: Search,
       name:'search',
-      props(route){
-        return{keyWord:route.params.keyWord}
-      }
+    
     },
     {
       path: "/",
