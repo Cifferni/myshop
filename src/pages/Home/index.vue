@@ -1,6 +1,6 @@
 <template>
   <div>
-  <TypeNav> </TypeNav> 
+    <TypeNav> </TypeNav>
     <Container></Container>
     <Recommend></Recommend>
     <Rank></Rank>
@@ -12,25 +12,25 @@
 </template>
 
 <script>
-import  Container from './Container'
-import  Recommend from './Recommend'
-import  Rank from './Rank'
-import  Like from './Like'
-import  Brand from './Brand'
-import  Floor from './Floor'
+import Container from "./Container";
+import Recommend from "./Recommend";
+import Rank from "./Rank";
+import Like from "./Like";
+import Brand from "./Brand";
+import Floor from "./Floor";
+
 export default {
   name: "Home",
-  components:{
-     Container, 
-     Recommend,
-     Rank,
-     Like,
-     Floor,
-     Brand
-  }
+  components: {
+    Container,
+    Recommend,
+    Rank,
+    Like,
+    Floor,
+    Brand,
+  },
+ 
 };
 </script>
 
-<style long="less" scoped>
-
-</style>
+<style long="less" scoped></style>

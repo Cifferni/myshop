@@ -32,4 +32,4 @@ service.interceptors.response.use(
   }
 );
 
-export default service;
+export default service; 
