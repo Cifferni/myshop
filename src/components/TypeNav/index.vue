@@ -3,7 +3,45 @@
     <!-- 商品分类导航 -->
     <div class="type-nav">
       <div class="container">
-        <h2 class="all">全部商品分类</h2>
+        <div @mouseleave="bgShow = -6">
+          <h2 class="all">全部商品分类</h2>
+          <div class="sort">
+            <div class="all-sort-list2">
+              <div
+                class="item"
+                :class="{ 'item-bg': index1 === bgShow }"
+                v-for="(item1, index1) in categoryList"
+                :key="item1.categoryId"
+                @mouseenter="moveInItem(index1)"
+              >
+                <h3>
+                  <a href="">{{ item1.categoryName }}</a>
+                </h3>
+                <div class="item-list clearfix">
+                  <div class="subitem">
+                    <dl
+                      class="fore"
+                      v-for="item2 in item1.categoryChild"
+                      :key="item2.categoryId"
+                    >
+                      <dt>
+                        <a href="">{{ item2.categoryName }}</a>
+                      </dt>
+                      <dd>
+                        <em
+                          v-for="item3 in item2.categoryChild"
+                          :key="item3.categoryId"
+                        >
+                          <a href=""> {{ item3.categoryName }}</a>
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <nav class="nav">
           <a href="###">服装城</a>
           <a href="###">美妆馆</a>
@@ -14,30 +52,6 @@
           <a href="###">有趣</a>
           <a href="###">秒杀</a>
         </nav>
-        <div class="sort">
-          <div class="all-sort-list2">
-            <div class="item" v-for ="item1 in categoryList" :key="item1.categoryId">
-              <h3>
-                <a href="">{{item1.categoryName}}</a>
-              </h3>
-              <div class="item-list clearfix">
-                <div class="subitem">
-                  <dl class="fore" v-for="item2 in item1.categoryChild " :key="item2.categoryId">
-                    <dt>
-                      <a href="">{{item2.categoryName}}</a>
-                    </dt>
-                    <dd>
-                      <em  v-for="item3 in item2.categoryChild " :key="item3.categoryId">
-                        <a href=""> {{item3.categoryName}}</a>
-                      </em>
-                      
-                    </dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -45,15 +59,28 @@
 
 <script>
 import { mapState } from "vuex";
+//引入lodash中的throttle
+import throttle from "lodash/throttle";
 export default {
   name: "TypeNav",
-   mounted() {
-    console.log(this)
+  data() {
+    return {
+      bgShow: -6,
+    };
+  },
+  methods: {
+    moveInItem: throttle(function(value) {
+      console.log(value)
+      this.bgShow = value;
+    }, 20,{ 'trailing': false }),
+  },
+  mounted() {
+    console.log(this);
     this.$store.dispatch("getCategoryList");
   },
-  computed:{
+  computed: {
     ...mapState({
-      categoryList: state => state.home.categoryList
+      categoryList: (state) => state.home.categoryList,
     }),
   },
 };
@@ -61,7 +88,7 @@ export default {
 
 <style lang="less" scoped>
 .type-nav {
-  border-bottom: 2px solid #e1251b;
+  border-bottom: 2px solid #860786;
 
   .container {
     width: 1200px;
@@ -72,7 +99,7 @@ export default {
     .all {
       width: 210px;
       height: 45px;
-      background-color: #e1251b;
+      background-color: #860786;
       line-height: 45px;
       text-align: center;
       color: #fff;
@@ -169,10 +196,9 @@ export default {
             }
           }
 
-          &:hover {
+          &.item-bg {
             background-color: rgb(170, 123, 192);
             .item-list {
-              
               display: block;
             }
           }
