@@ -3,44 +3,64 @@
     <!-- 商品分类导航 -->
     <div class="type-nav">
       <div class="container">
-        <div @mouseleave="bgShow = -6">
+        <div @mouseleave="leaveItem" @mouseenter="isShow = true">
           <h2 class="all">全部商品分类</h2>
-          <div class="sort">
-            <div class="all-sort-list2">
-              <div
-                class="item"
-                :class="{ 'item-bg': index1 === bgShow }"
-                v-for="(item1, index1) in categoryList"
-                :key="item1.categoryId"
-                @mouseenter="moveInItem(index1)"
-              >
-                <h3>
-                  <a href="">{{ item1.categoryName }}</a>
-                </h3>
-                <div class="item-list clearfix">
-                  <div class="subitem">
-                    <dl
-                      class="fore"
-                      v-for="item2 in item1.categoryChild"
-                      :key="item2.categoryId"
+          <transition name="sort">
+            <div class="sort" v-show="isShow">
+              <div class="all-sort-list2" @click="toSearch($event)">
+                <div
+                  class="item"
+                  :class="{ 'item-bg': index1 === bgShow }"
+                  v-for="(item1, index1) in categoryList"
+                  :key="item1.categoryId"
+                  @mouseenter="moveInItem(index1)"
+                >
+                  <h3>
+                    <a
+                      href="javaScript:;"
+                      :data-category1Id="item1.categoryId"
+                      :data-categoryName="item1.categoryName"
                     >
-                      <dt>
-                        <a href="">{{ item2.categoryName }}</a>
-                      </dt>
-                      <dd>
-                        <em
-                          v-for="item3 in item2.categoryChild"
-                          :key="item3.categoryId"
-                        >
-                          <a href=""> {{ item3.categoryName }}</a>
-                        </em>
-                      </dd>
-                    </dl>
+                      {{ item1.categoryName }}</a
+                    >
+                  </h3>
+                  <div class="item-list clearfix">
+                    <div class="subitem">
+                      <dl
+                        class="fore"
+                        v-for="item2 in item1.categoryChild"
+                        :key="item2.categoryId"
+                      >
+                        <dt>
+                          <a
+                            href="javaScript:;"
+                            :data-category2Id="item2.categoryId"
+                            :data-categoryName="item2.categoryName"
+                          >
+                            {{ item2.categoryName }}
+                          </a>
+                        </dt>
+                        <dd>
+                          <em
+                            v-for="item3 in item2.categoryChild"
+                            :key="item3.categoryId"
+                          >
+                            <a
+                              href="javaScript:;"
+                              :data-category3Id="item3.categoryId"
+                              :data-categoryName="item3.categoryName"
+                            >
+                              {{ item3.categoryName }}</a
+                            >
+                          </em>
+                        </dd>
+                      </dl>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </transition>
         </div>
         <nav class="nav">
           <a href="###">服装城</a>
@@ -66,17 +86,65 @@ export default {
   data() {
     return {
       bgShow: -6,
+      isShow: true,
     };
   },
   methods: {
-    moveInItem: throttle(function(value) {
-      console.log(value)
-      this.bgShow = value;
-    }, 20,{ 'trailing': false }),
+    //使用函数节流控制背景
+    moveInItem: throttle(
+      function(value) {
+        this.bgShow = value;
+      },
+      20,
+      { trailing: false }
+    ),
+    //点击导航传递参数
+    toSearch(event) {
+      let {
+        categoryname,
+        category1id,
+        category2id,
+        category3id,
+      } = event.target.dataset; //手机默认属性
+      if (categoryname) {
+        let location = {
+          name: "search",
+        };
+        let query = {
+          categorName: categoryname,
+        };
+        if (category1id) {
+          query.category1Id = category1id;
+        } else if (category2id) {
+          query.category2Id = category2id;
+        } else {
+          query.category3Id = category3id;
+        }
+
+        //合并路由参数
+        let {
+          $route: { params },
+        } = this;
+        if (params) {
+          location.params = params;
+        }
+
+        location.query = { ...query };
+        this.$router.push(location);
+      }
+    },
+    //全部商品移除背景消失,和item消失
+    leaveItem() {
+      this.bgShow = -6;
+      if (this.$route.path === "/search") {
+        this.isShow = false;
+      }
+    },
   },
   mounted() {
-    console.log(this);
-    this.$store.dispatch("getCategoryList");
+    if (this.$route.path === "/search") {
+      this.isShow = false;
+    }
   },
   computed: {
     ...mapState({
@@ -126,11 +194,21 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
-
+      &.sort-enter {
+        box-shadow: #333 0px 0px 0px;
+        opacity: 0.1;
+      }
+      &.sort-enter-to {
+        box-shadow: #333 0px 0px 2px;
+        opacity: 1;
+      }
+      &.sort-enter-active {
+        transition: all 1s;
+      }
       .all-sort-list2 {
         .item {
           h3 {
-            line-height: 30px;
+            line-height: 27px;
             font-size: 14px;
             font-weight: 400;
             overflow: hidden;

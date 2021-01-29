@@ -67,10 +67,13 @@ export default {
   },
   methods: {
     search() {
-      this.$router.push({
+    let location = {
         name: "search",
-        params: { keyWord: this.keyWord ||undefined },
-      });
+        params: { keyWord: this.keyWord || undefined },
+      };
+      if (this.$route.query) location.query = this.$route.query;
+      console.log(location);
+      this.$router.push(location);
     },
   },
 };

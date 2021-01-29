@@ -22,7 +22,7 @@ VueRouter.prototype.push = function(localtion, resolve, reject) {
     return oldPush.call(this, localtion, resolve, reject);
   }
 };
-VueRouter.prototype.push = function(localtion, resolve, reject) {
+VueRouter.prototype.replace = function(localtion, resolve, reject) {
   if (!resolve && !reject) {
     return oldReplace.call(this, localtion).catch(() => {});
   } else {
