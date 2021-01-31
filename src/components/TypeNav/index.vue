@@ -37,7 +37,7 @@
                             :data-category2Id="item2.categoryId"
                             :data-categoryName="item2.categoryName"
                           >
-                            {{ item2.categoryName }}
+                            {{ item2.categoryName}}
                           </a>
                         </dt>
                         <dd>
@@ -91,13 +91,10 @@ export default {
   },
   methods: {
     //使用函数节流控制背景
-    moveInItem: throttle(
-      function(value) {
-        this.bgShow = value;
-      },
-      20,
-      { trailing: false }
-    ),
+    moveInItem:throttle(function(value){
+      this.bgShow = value
+    
+    },20,{trailing :false}),
     //点击导航传递参数
     toSearch(event) {
       let {

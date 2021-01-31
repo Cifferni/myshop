@@ -6,6 +6,7 @@
 
 //引入二次封装的axios
 import service from "./axios";
+import mockAjax from './mockAjax'
 
 export const reqCategoryList = () => {
   return service({
@@ -13,3 +14,17 @@ export const reqCategoryList = () => {
     url: "/product/getBaseCategoryList",
   });
 };
+
+export const  reqBannersData = () =>{
+  return mockAjax({
+    method:'get',
+    url:'/banner'
+  })
+}
+
+export const  reqFloorData = () =>{
+  return mockAjax({
+    method:'get',
+    url:'/floor'
+  })
+}
