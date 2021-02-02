@@ -133,13 +133,13 @@ export default {
     //全部商品移除背景消失,和item消失
     leaveItem() {
       this.bgShow = -6;
-      if (this.$route.path === "/search") {
+      if (this.$route.path !== "/home") {
         this.isShow = false;
       }
     },
   },
   mounted() {
-    if (this.$route.path === "/search") {
+    if (this.$route.path !== "/home") {
       this.isShow = false;
     }
   },

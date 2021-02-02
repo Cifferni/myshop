@@ -42,6 +42,7 @@
               id="autocomplete"
               class="input-error input-xxlarge"
               v-model="keyWord"
+              @keydown.enter.prevent="search"
             />
             <button
               class="sui-btn btn-xlarge btn-danger"
@@ -75,7 +76,14 @@ export default {
       console.log(location);
       this.$router.push(location);
     },
+    clearKeyWord(){
+       this.keyWord = ''
+       this.search()
+    }
   },
+ mounted(){
+   this.$bus.$on('clearKeyWord',this.clearKeyWord)
+ }
 };
 </script>
 

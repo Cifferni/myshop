@@ -59,7 +59,7 @@ const router = new VueRouter({
     },
     {
       path: "/",
-      component: Home,
+      redirect: 'home',
     },
   ],
 });

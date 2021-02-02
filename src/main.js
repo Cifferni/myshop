@@ -10,6 +10,9 @@ Vue.config.productionTip = false;
 Vue.component("TypeNav", TypeNav);
 Vue.component("CarouselMap",CarouselMap)
 new Vue({
+  beforeCreate(){
+     Vue.prototype.$bus = this
+  },
   el: "#app",
   router,
   store,
