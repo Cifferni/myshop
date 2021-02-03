@@ -68,22 +68,23 @@ export default {
   },
   methods: {
     search() {
-    let location = {
+      let location = {
         name: "search",
         params: { keyWord: this.keyWord || undefined },
       };
       if (this.$route.query) location.query = this.$route.query;
-      console.log(location);
-      this.$router.push(location);
+      if (this.$route.path !== "/home") {
+        this.$router.replace(location);
+      }
+       this.$router.push(location);
     },
-    clearKeyWord(){
-       this.keyWord = ''
-       this.search()
-    }
+    clearKeyWord() {
+      this.keyWord = "";
+    },
   },
- mounted(){
-   this.$bus.$on('clearKeyWord',this.clearKeyWord)
- }
+  mounted() {
+    this.$bus.$on("clearKeyWord", this.clearKeyWord);
+  },
 };
 </script>
 

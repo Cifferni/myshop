@@ -1,7 +1,7 @@
 <template>
   <div class="clearfix selector">
     <div class="type-wrap logo">
-      <div class="fl key brand">品牌</div>
+      <div class="fl key ">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
           <li
@@ -13,13 +13,17 @@
           </li>
         </ul>
       </div>
+      <!-- <div class="ext">
+        <a href="javascript:void(0);" class="sui-btn">多选</a>
+        <a href="javascript:void(0);">更多</a>
+      </div> -->
     </div>
     <div class="type-wrap" v-for="item1 in attrsList" :key="item1.attrId">
       <div class="fl key">{{ item1.attrName }}</div>
       <div class="fl value">
         <ul class="type-list">
           <li v-for="(item2, index) in item1.attrValueList" :key="index">
-            <a @click="getProps(item1,item2)">{{ item2 }}</a>
+            <a @click.prevent="getProps(item1, item2)">{{ item2 }}</a>
           </li>
         </ul>
       </div>
@@ -35,14 +39,14 @@ export default {
   computed: {
     ...mapGetters(["trademarkList", "attrsList"]),
   },
-  methods:{
-    getTrademark(value){
-      this.$emit('getTrademark',value)
+  methods: {
+    getTrademark(value) {
+      this.$emit("getTrademark", value);
     },
-    getProps(item1,item2){
-      this.$emit('getProps',item1,item2)
-    }
-  }
+    getProps(item1, item2) {
+      this.$emit("getProps", item1, item2);
+    },
+  },
 };
 </script>
 

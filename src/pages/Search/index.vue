@@ -39,23 +39,33 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: SortKey === '1' }">
+                  <a href="#" @click.prevent="goSort('1')">
+                    综合
+                    <i
+                      v-if="reqSearchInfo.order.split(':')[0] === '1'"
+                      class="iconfont"
+                      :class="{
+                        icondown: SortValue === 'desc',
+                        iconup: SortValue === 'asc',
+                      }"
+                    >
+                    </i>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: SortKey === '2' }">
+                  <a href="#" @click.prevent="goSort('2')">
+                    价格
+                    <i
+                      v-if="reqSearchInfo.order.split(':')[0] === '2'"
+                      class="iconfont"
+                      :class="{
+                        icondown: SortValue === 'desc',
+                        iconup: SortValue === 'asc',
+                      }"
+                    >
+                    </i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -99,33 +109,13 @@
             </ul>
           </div>
           <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
+            <Pagination 
+            :pageNo="reqSearchInfo.pageNo"
+            :total="SeardInfro.total"
+            :pageSize ="SeardInfro.pageSize"
+            :continuousNum = 5
+            @turnPage='turnPage'
+            ></Pagination>
           </div>
         </div>
       </div>
@@ -134,7 +124,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
@@ -165,6 +155,15 @@ export default {
   computed: {
     //从Vuex中的serach的getters中获取数据
     ...mapGetters(["goodsList"]),
+    ...mapState({
+      SeardInfro: (state) => state.search.SeardInfro,
+    }),
+    SortKey() {
+      return this.reqSearchInfo.order.split(":")[0];
+    },
+    SortValue() {
+      return this.reqSearchInfo.order.split(":")[1];
+    },
   },
   methods: {
     //定义函数dispatch actions 中的函数
@@ -189,6 +188,10 @@ export default {
         categorName,
         keyword,
       };
+      //清楚空串就是给赋值能undefined 发送请求的时候undeinfed的数据就不会发过去
+      Object.keys(result).forEach((item) => {
+        if (result[item] === "") result[item] = undefined;
+      });
       this.reqSearchInfo = result;
     },
     //点击x就会清除CategorName中的内容,修改成undefined
@@ -198,8 +201,9 @@ export default {
       this.reqSearchInfo.category2Id = undefined;
       this.reqSearchInfo.category1Id = undefined;
       this.reqSearchInfo.categorName = undefined;
+       this.reqSearchInfo.pageNo = 1
       this.getSearchInfo();
-      this.$router.push({
+      this.$router.replace({
         name: "search",
         params: this.$route.params,
       });
@@ -209,29 +213,55 @@ export default {
       this.reqSearchInfo.keyword = undefined;
       //清除header搜索框中的文字,使用全局事件总线,实现任意组件之间的通信
       this.$bus.$emit("clearKeyWord");
-      this.getSearchInfo();
+       this.reqSearchInfo.pageNo = 1
+      this.$router.replace({
+        name: "search",
+        query: this.$route.query,
+      });
     },
     //获取子组件中的品牌数据
     getTrademark(value) {
       this.reqSearchInfo.trademark = `${value.tmId}:${value.tmName}`;
+       this.reqSearchInfo.pageNo = 1
       this.getSearchInfo();
     },
     clearTrademark() {
       this.reqSearchInfo.trademark = undefined;
+       this.reqSearchInfo.pageNo = 1
       this.getSearchInfo();
     },
     getProps(item1, item2) {
       const props = `${item1.attrId}:${item2}:${item1.attrName}`;
       const result = this.reqSearchInfo.props.some((item) => item === props);
+    this.reqSearchInfo.pageNo = 1
       if (!result) {
+        
         this.reqSearchInfo.props.push(props);
         this.getSearchInfo();
       }
     },
     clearProps(index) {
       this.reqSearchInfo.props.splice(index, 1);
+          this.reqSearchInfo.pageNo = 1
       this.getSearchInfo();
     },
+    goSort(value) {
+      let key = this.reqSearchInfo.order.split(":")[0];
+      let val = this.reqSearchInfo.order.split(":")[1];
+      let newOrder = "";
+      if (value === key) {
+        newOrder = `${key}:${val === "asc" ? "desc" : "asc"}`;
+      } else {
+        newOrder = `${value}:asc`;
+      }
+      this.reqSearchInfo.order = newOrder;
+      this.getSearchInfo();
+    },
+    turnPage(value){
+      this.reqSearchInfo.pageNo = value
+      this.getSearchInfo();
+    }
+    
   },
   watch: {
     //监视$route从而达到可以可以监视path的改变,只要path改变就会重新请求api获取数据
@@ -493,88 +523,9 @@ export default {
       .page {
         width: 733px;
         height: 66px;
+        margin: 0 0 0 280px;
         overflow: hidden;
-        float: right;
-
-        .sui-pagination {
-          margin: 18px 0;
-
-          ul {
-            margin-left: 0;
-            margin-bottom: 0;
-            vertical-align: middle;
-            width: 490px;
-            float: left;
-
-            li {
-              line-height: 18px;
-              display: inline-block;
-
-              a {
-                position: relative;
-                float: left;
-                line-height: 18px;
-                text-decoration: none;
-                background-color: #fff;
-                border: 1px solid #e0e9ee;
-                margin-left: -1px;
-                font-size: 14px;
-                padding: 9px 18px;
-                color: #333;
-              }
-
-              &.active {
-                a {
-                  background-color: #fff;
-                  color: #e1251b;
-                  border-color: #fff;
-                  cursor: default;
-                }
-              }
-
-              &.prev {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-
-              &.disabled {
-                a {
-                  color: #999;
-                  cursor: default;
-                }
-              }
-
-              &.dotted {
-                span {
-                  margin-left: -1px;
-                  position: relative;
-                  float: left;
-                  line-height: 18px;
-                  text-decoration: none;
-                  background-color: #fff;
-                  font-size: 14px;
-                  border: 0;
-                  padding: 9px 18px;
-                  color: #333;
-                }
-              }
-
-              &.next {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-            }
-          }
-
-          div {
-            color: #333;
-            font-size: 14px;
-            float: right;
-            width: 241px;
-          }
-        }
+        float: left;
       }
     }
   }
