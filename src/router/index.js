@@ -1,9 +1,6 @@
 import VueRouter from "vue-router";
 import Vue from "vue";
-import Home from "@/pages/Home";
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
-import Search from "@/pages/Search";
+import routes from "./routes"
 Vue.use(VueRouter);
 /* 
      解决多次点击编程时导航报错问题,多次执行会抛出NavigationDuplicated的警告错误!
@@ -32,36 +29,10 @@ VueRouter.prototype.replace = function(localtion, resolve, reject) {
 
 const router = new VueRouter({
   mode: "history",
-  routes: [
-    {
-      path: "/home",
-      component: Home,
-    },
-    {
-      path: "/login",
-      component: Login,
-      //路由对象中的原配置,可以配置我们所需要的任何数据
-      meta: {
-        isShow: true,
-      },
-    },
-    {
-      path: "/register",
-      component: Register,
-      meta: {
-        isShow: true,
-      },
-    },
-    {
-      path: "/search/:keyWord?",
-      component: Search,
-      name: "search",
-    },
-    {
-      path: "/",
-      redirect: 'home',
-    },
-  ],
+  routes,
+  scrollBehavior () {
+    return {y: 0 }
+  }
 });
 
 export default router;

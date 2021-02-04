@@ -38,3 +38,19 @@ export const reqSearchInfo = (value) =>{
     data:value
   })
 }
+
+//获取 reqSkuInfo 
+export const  reqDetailInfo = (skuId) =>{
+ return service({
+    method:'get',
+    url:`/item/${skuId}`,
+ 
+  })
+}
+//添加购物车
+export const addShopCart =(skuId,skuNum)=>{
+  return service({
+     method:'post',
+     url:`/cart/addToCart/${ skuId }/${ skuNum }`
+  })
+}

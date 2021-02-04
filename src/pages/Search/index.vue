@@ -75,9 +75,9 @@
               <li class="yui3-u-1-5" v-for="item in goodsList" :key="item.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="item.defaultImg"
-                    /></a>
+                    <router-link :to="`/detail/${item.id}`"
+                      ><img :src="item.defaultImg" />
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -86,9 +86,11 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a target="_blank" href="item.html" :title="item.title">{{
-                      item.title
-                    }}</a>
+                    <router-link
+                      :to="`/detail/${item.id}`"
+                      :title="item.title"
+                      >{{ item.title }}</router-link
+                    >
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -109,12 +111,12 @@
             </ul>
           </div>
           <div class="fr page">
-            <Pagination 
-            :pageNo="reqSearchInfo.pageNo"
-            :total="SeardInfro.total"
-            :pageSize ="SeardInfro.pageSize"
-            :continuousNum = 5
-            @turnPage='turnPage'
+            <Pagination
+              :pageNo="reqSearchInfo.pageNo"
+              :total="SeardInfro.total"
+              :pageSize="SeardInfro.pageSize"
+              :continuousNum="5"
+              @turnPage="turnPage"
             ></Pagination>
           </div>
         </div>
@@ -201,7 +203,7 @@ export default {
       this.reqSearchInfo.category2Id = undefined;
       this.reqSearchInfo.category1Id = undefined;
       this.reqSearchInfo.categorName = undefined;
-       this.reqSearchInfo.pageNo = 1
+      this.reqSearchInfo.pageNo = 1;
       this.getSearchInfo();
       this.$router.replace({
         name: "search",
@@ -213,7 +215,7 @@ export default {
       this.reqSearchInfo.keyword = undefined;
       //清除header搜索框中的文字,使用全局事件总线,实现任意组件之间的通信
       this.$bus.$emit("clearKeyWord");
-       this.reqSearchInfo.pageNo = 1
+      this.reqSearchInfo.pageNo = 1;
       this.$router.replace({
         name: "search",
         query: this.$route.query,
@@ -222,27 +224,26 @@ export default {
     //获取子组件中的品牌数据
     getTrademark(value) {
       this.reqSearchInfo.trademark = `${value.tmId}:${value.tmName}`;
-       this.reqSearchInfo.pageNo = 1
+      this.reqSearchInfo.pageNo = 1;
       this.getSearchInfo();
     },
     clearTrademark() {
       this.reqSearchInfo.trademark = undefined;
-       this.reqSearchInfo.pageNo = 1
+      this.reqSearchInfo.pageNo = 1;
       this.getSearchInfo();
     },
     getProps(item1, item2) {
       const props = `${item1.attrId}:${item2}:${item1.attrName}`;
       const result = this.reqSearchInfo.props.some((item) => item === props);
-    this.reqSearchInfo.pageNo = 1
+      this.reqSearchInfo.pageNo = 1;
       if (!result) {
-        
         this.reqSearchInfo.props.push(props);
         this.getSearchInfo();
       }
     },
     clearProps(index) {
       this.reqSearchInfo.props.splice(index, 1);
-          this.reqSearchInfo.pageNo = 1
+      this.reqSearchInfo.pageNo = 1;
       this.getSearchInfo();
     },
     goSort(value) {
@@ -257,11 +258,10 @@ export default {
       this.reqSearchInfo.order = newOrder;
       this.getSearchInfo();
     },
-    turnPage(value){
-      this.reqSearchInfo.pageNo = value
+    turnPage(value) {
+      this.reqSearchInfo.pageNo = value;
       this.getSearchInfo();
-    }
-    
+    },
   },
   watch: {
     //监视$route从而达到可以可以监视path的改变,只要path改变就会重新请求api获取数据
