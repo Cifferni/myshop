@@ -92,7 +92,7 @@
                   v-model="skuNum"
                   @change="
                     $event.target.value >= 1
-                      ? (skuNum = $event.target.value)
+                      ? (skuNum = $event.target.value *1)
                       : (skuNum = 1)
                   "
                 />
@@ -366,6 +366,7 @@ export default {
     return {
       skuId: "",
       skuNum: 1,
+      
     };
   },
   beforeMount() {
@@ -386,9 +387,9 @@ export default {
       });
       item.isChecked = "1";
     },
-    addShopCart(){
+  async addShopCart(){
      try{
-        this.$store.dispatch('addShopCart',{skuId:this.skuId,skuNum:this.skuNum})
+       await this.$store.dispatch('addShopCart',{skuId:this.skuId,skuNum:this.skuNum})
         sessionStorage.setItem("SKUINFO_KEY",JSON.stringify(this.skuInfo))
         this.$router.push(`/addcartsuccess/${this.skuNum}`)
      }catch(error){
@@ -566,7 +567,7 @@ export default {
 
                 &.active {
                   color: green;
-                  border: 1px solid green;
+                  border: 1px solid rgb(96, 7, 168);
                 }
               }
             }

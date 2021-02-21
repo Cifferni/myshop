@@ -97,7 +97,7 @@ export default {
   .mask {
     width: 50%;
     height: 50%;
-    background-color: rgba(0, 255, 0, 0.3);
+    background-color: rgba(175, 118, 250, 0.3);
     position: absolute;
     left: 0;
     top: 0;

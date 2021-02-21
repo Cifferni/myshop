@@ -142,7 +142,7 @@ export default {
         trademark: "",
         order: "1:desc", //排序规则
         pageNo: 1, //搜索第几页的商品
-        pageSize: 10, //每页错少个商品
+        pageSize: 3, //每页错少个商品
       },
     };
   },

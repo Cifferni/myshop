@@ -20,13 +20,12 @@
 
 <script>
 import Swiper from "swiper";
-import { Handler } from "mockjs";
 export default {
   name: "ImageList",
   props: ["skuImageList"],
   data() {
     return {
-      isBorder: "1",
+      isBorder: "0",
     };
   },
   mounted() {},

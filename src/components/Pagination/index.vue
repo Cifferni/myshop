@@ -3,7 +3,7 @@
     <button :disabled="pageNo === 1" @click="$emit('turnPage', pageNo - 1)">
       上一页
     </button>
-    <button v-if="startEnd.start > 1">1</button>
+    <button v-if="startEnd.start > 1"   @click="$emit('turnPage', 1)">1</button>
     <button v-if="startEnd.start > 2">···</button>
 
     <button

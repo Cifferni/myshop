@@ -9,6 +9,8 @@ import axios from "axios";
 import NProgress from "nprogress";
 //引入关于nprogress的css
 import "nprogress/nprogress.css";
+//引入store
+import store from "@/store";
 const service = axios.create({
   baseURL: "/api", //接口中重复的路径部分
   timeout: 20000, //请求超时时间
@@ -16,6 +18,16 @@ const service = axios.create({
 //请求拦截器
 service.interceptors.request.use((config) => {
   NProgress.start(); //进度条开始
+  let userTempId = store.state.user.userTempId;
+  if (userTempId) {
+    config.headers.userTempId = store.state.user.userTempId;
+  }
+  //登录成功后,需要把token添加到请求头当中,从今往后所有的请求当中都要带上这个token
+  let token = store.state.user.token;
+  if (token) {
+    config.headers.token = token;
+  }
+
   return config;
 });
 
@@ -32,4 +44,4 @@ service.interceptors.response.use(
   }
 );
 
-export default service; 
+export default service;

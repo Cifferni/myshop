@@ -7,6 +7,7 @@ import  '@/mock/mockServer'
 import 'swiper/css/swiper.css'
 import CarouselMap from '@/components/CarouselMap'
 import Pagination from "@/components/Pagination"
+import * as API from '@/api'
 Vue.config.productionTip = false;
 Vue.component("TypeNav", TypeNav);
 Vue.component("CarouselMap",CarouselMap)
@@ -14,6 +15,7 @@ Vue.component("Pagination",Pagination)
 new Vue({
   beforeCreate(){
      Vue.prototype.$bus = this
+     Vue.prototype.API = API
   },
   el: "#app",
   router,

@@ -6,7 +6,14 @@
         <div class="container">
           <div class="loginList">
             <p>尚品汇欢迎您！</p>
-            <p>
+            <p v-if="$store.state.user.userInfo.name">
+              <!-- 登录路由 -->
+              <a href="javascript:;">{{$store.state.user.userInfo.name}} </a>
+              <!-- 注册路由 -->
+             <a href="javascript:;" @click="signOut">退出登录 </a>
+            </p>
+
+            <p v-else> 
               <span>请</span>
               <!-- 登录路由 -->
               <router-link to="/login">登录</router-link>
@@ -18,7 +25,8 @@
           </div>
           <div class="typeList">
             <a href="###">我的订单</a>
-            <a href="###">我的购物车</a>
+            <router-link to='/shopcart'>我的购物车</router-link>
+            <!-- <a href="###">我的购物车</a> -->
             <a href="###">我的尚品汇</a>
             <a href="###">尚品汇会员</a>
             <a href="###">企业采购</a>
@@ -76,11 +84,19 @@ export default {
       if (this.$route.path !== "/home") {
         this.$router.replace(location);
       }
-       this.$router.push(location);
+      this.$router.push(location);
     },
     clearKeyWord() {
       this.keyWord = "";
     },
+    async signOut(){
+       try {
+         await this.$store.dispatch('SignOut')
+         this.$router.push('/')
+       } catch (error) {
+         alert('退出失败')
+       }
+    }
   },
   mounted() {
     this.$bus.$on("clearKeyWord", this.clearKeyWord);
