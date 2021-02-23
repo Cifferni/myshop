@@ -96,7 +96,8 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <!-- <router-link class="subBtn" to="/pay" >提交订单</router-link> -->
+       <a href="" class="subBtn " @click.prevent="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -124,6 +125,26 @@ export default {
     changeDefault(value,userAddressInfo){
      userAddressInfo.forEach (item=>item.isDefault = '0')
      value.isDefault = '1'
+  },
+ async submitOrder(){
+    let tradeNo = this.tradeInfo.tradeNo
+    let tradeInfo = {
+        consignee: this.defaultAddress.consignee,
+        consigneeTel: this.defaultAddress.phoneNum,
+        deliveryAddress: this.defaultAddress.fullAddress,
+        paymentWay: "ONLINE",
+        orderComment: this.message,
+        orderDetailList: this.detailArrayList,
+      };
+ 
+     const result = await this.$API.reqSubmitOrder(tradeNo,tradeInfo)
+     if(result.code === 200){
+        
+        this.$message.success('自动跳转支付页面')
+        this.$router.push(`/pay?orderNum=${result.data}`)
+     }else{
+         this.$message.error(result.message[0])
+     }
   }
   },
   computed: {

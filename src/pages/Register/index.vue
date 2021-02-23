@@ -11,42 +11,65 @@
       <div class="content">
         <label>手机号:</label>
         <input
-          type="text"
           placeholder="请输入你的手机号"
+          type="text"
           v-model="phoneNumber"
+          name="phone"
+          v-validate="{ required: true, regex: /^1\d{10}/ }"
+          :class="{ invalid: errors.has('phone') }"
         />
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("phone") }}</span>
       </div>
+
       <div class="content">
         <label>验证码:</label>
         <input
-          type="text"
           placeholder="请输入验证码"
+          type="text"
           v-model="VerificationCode"
+          name="code"
+          v-validate="{ required: true, regex: /^\d{6}$/ }"
+          :class="{ invalid: errors.has('code') }"
         />
+        <span class="error-msg">{{ errors.first("code") }}</span>
         <button style="width:70px;height:38px" @click="reqGetCode">
           获取验证码
         </button>
-        <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
         <input
+          placeholder="请输入密码"
           type="text"
-          placeholder="请输入你的登录密码"
           v-model="passWord"
+          name="password"
+          v-validate="{ required: true, regex: /^[0-9 A-Z a-z ]{6,20}$/ }"
+          :class="{ invalid: errors.has('password') }"
         />
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("password") }}</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码" v-model="passWord2" />
-        <span class="error-msg">错误提示信息</span>
+        <input
+          placeholder="请输入再次密码"
+          type="text"
+          v-model="passWord2"
+          name="password2"
+          v-validate="{ is: passWord }"
+          :class="{ invalid: errors.has('password2') }"
+        />
+        <span class="error-msg">{{ errors.first("password2") }}</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox" v-model="isChecked" />
+        <input
+          type="checkbox"
+          v-model="isChecked"
+          name="isChecked"
+          v-validate="{ agree: true }"
+          :class="{ invalid: errors.has('password') }"
+        />
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("isChecked") }}</span>
       </div>
       <div class="btn">
         <button @click="registerUsers">完成注册</button>
@@ -84,9 +107,12 @@ export default {
     };
   },
   methods: {
-   async registerUsers() {
-      let { phoneNumber, VerificationCode, passWord, passWord2 } = this;
-      if (phoneNumber && VerificationCode && passWord2 === passWord) {
+    async registerUsers() {
+      //点击完成注册首先对所有的表单做完整验证,验证通过返回的是true,没通过返回false
+      const success = await this.$validator.validateAll();
+      if (success) {
+        let { phoneNumber, VerificationCode, passWord } = this;
+        //同义验证
         let registerInfo = {
           phone: phoneNumber,
           password: passWord,
@@ -94,24 +120,24 @@ export default {
         };
         //15133610637
         try {
-         await this.$store.dispatch("isterInfo", registerInfo);
-         this.$router.push('/login')
+          await this.$store.dispatch("isterInfo", registerInfo);
+          this.$router.push("/login");
         } catch (error) {
-          alert('获取验证码失败')
+          this.$message.error(error.message);
         }
       }
     },
-   async reqGetCode(){
-      let {phoneNumber} = this;
-      if(phoneNumber){
-       try{
-        await this.$store.dispatch('reqGetCode',phoneNumber)
-        this.VerificationCode = this.$store.state.user.code
-       }catch(error){
-         alert(error.message)
-       }
+    async reqGetCode() {
+      let { phoneNumber } = this;
+      if (phoneNumber) {
+        try {
+          await this.$store.dispatch("reqGetCode", phoneNumber);
+          this.VerificationCode = this.$store.state.user.code;
+        } catch (error) {
+          alert(error.message);
+        }
       }
-    }
+    },
   },
 };
 </script>

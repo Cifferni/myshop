@@ -102,8 +102,10 @@ export default {
             phone: phone,
             password: password,
           });
-          alert("自动跳转的首页");
-          this.$router.push("/");
+         this.$message.success('将跳转到要去的页面')
+         let location = this.$route.query.location ||  '/'    
+         console.log(location)
+            this.$router.push(location);
         } catch (error) {
           alert("登录失败");
         }

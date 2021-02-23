@@ -137,8 +137,30 @@ export const reqUserAddress = () =>{
 export const reqSubmitOrder =(tradeNo,tradeInfo)=>{
    return service({
      url:`/order/auth/submitOrder?tradeNo=${tradeNo}`,
-     data:{
-      tradeInfo:tradeInfo
-     }
+     method:'post',
+     data: tradeInfo
    })
+}
+
+//请求获取支付信息 /payment/weixin/queryPayStatus/{orderId}
+export const reqPaymentInfo =(orderId) =>{
+  return service({
+    url:`/payment/weixin/createNative/${orderId}`,
+    method:'get'
+  })
+}
+
+//请求获取支付状态 /payment/weixin/queryPayStatus/{orderId}
+export const reqQueryPayStatus =(orderId)=>{
+  return service({
+    url:`/payment/weixin/queryPayStatus/${orderId}`,
+    method:'get'
+  })
+}
+//获取订单列表 order/auth/{page}/{limit}
+export const reqOrderListInfo = (page,limit)=>{
+  return service({
+    url:`order/auth/${page}/${limit}`,
+    method:'get'
+  })
 }

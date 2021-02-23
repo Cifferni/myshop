@@ -76,7 +76,7 @@
                 <div class="list-wrap">
                   <div class="p-img">
                     <router-link :to="`/detail/${item.id}`"
-                      ><img :src="item.defaultImg" />
+                      ><img v-lazy="item.defaultImg" />
                     </router-link>
                   </div>
                   <div class="price">
@@ -142,7 +142,7 @@ export default {
         trademark: "",
         order: "1:desc", //排序规则
         pageNo: 1, //搜索第几页的商品
-        pageSize: 3, //每页错少个商品
+        pageSize: 10, //每页错少个商品
       },
     };
   },

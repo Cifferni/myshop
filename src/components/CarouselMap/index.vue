@@ -21,6 +21,7 @@ export default {
   name: "Swiper",
   watch: {
     bannerData: {
+      immediate: true,
       handler() {
         this.$nextTick(function() {
           new Swiper(this.$refs.bannerSwiper1, {

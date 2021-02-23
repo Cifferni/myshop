@@ -70,7 +70,7 @@ router.beforeEach(async (to, from, next) => {
         //用户已经登录过,但是用户买没有获取用户信息
         try {
           await store.dispatch("getUserInfo");
-          next() 
+          next();
         } catch (error) {
           alert(error.message);
           //如果token获取失败,代表token可能过期
@@ -83,10 +83,13 @@ router.beforeEach(async (to, from, next) => {
   } else {
     //目前什么都不做
     //后面我们是要添加功能的
-    if(to.path === '/trade'){
-        next('/login')
+    let location = to.path                                                                      //startsWith()检查是否以指定的字符串开口,返回真假
+    if(location.indexOf('/trade')!==-1 || location.indexOf('/pay')!==-1 || location.startsWith('/center')){
+      next(`/login?location=${location}`)
+    }else{
+      next();
     }
-    next();
+    
   }
 });
 
